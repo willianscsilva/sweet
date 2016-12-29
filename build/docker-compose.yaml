@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  python-robot:
+       build:
+          context: .
+          args:
+            - env=${APP_ENV}
+       volumes:
+         - ../.:/home/
+         - /sys/fs/cgroup:/sys/fs/cgroup:ro
+         - /etc/localtime:/etc/localtime
+       container_name: python-robot
+       environment:
+         - APP_ENV=${APP_ENV}
+         - TERM=xterm-256color
+         - LANG=en_US.utf8
+       privileged: true
+       restart: always
+
