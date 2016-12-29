@@ -1,2 +1,2 @@
-# Sweet FrameWork
-Sweet FrameWork
+# Sweet Framework
+Sweet Framework
