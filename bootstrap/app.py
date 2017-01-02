@@ -2,15 +2,12 @@ import os, imp, sys
 from bootstrap import environment
 from config.app import app
 from config.database import database
-from container.container import Container
 
-class App(app, database, Container):
-    #APP_ENV, envFile, dataConf, dbInstance, inputInstance, logInstance = None, None, None, None, None, None
-    APP_ENV, envFile, dataConf, inputInstance, logInstance = None, None, None, None, None
+class App(app, database):
+    APP_ENV, envFile, dataConf, dbInstance, inputInstance, logInstance = None, None, None, None, None, None
     prePath, path = '', None
     DSF  = None
     def __init__(self):
-        self.handleContainer()
         self.path = os.path.realpath(os.path.abspath(sys.argv[0]) + '/../')
         self.getEnv()
         self.getFileConf()
@@ -19,11 +16,9 @@ class App(app, database, Container):
         self.logInstance = self.importLogFile()
         self.logInstance.path = self.path
 
-        sys.exit(0)
-
-        #self.dbInstance = self.importDbFile()
-        #self.dbInstance.LOG = self.logInstance
-        #self.getDBConnectionsData()
+        self.dbInstance = self.importDbFile()
+        self.dbInstance.LOG = self.logInstance
+        self.getDBConnectionsData()
 
         self.inputInstance = self.importInputFile()
 
@@ -47,7 +42,7 @@ class App(app, database, Container):
         pathClass = imp.load_source(className, fullPath + '.py')
         return getattr(pathClass, className)
 
-    """def importDbFile(self):
+    def importDbFile(self):
         className = 'DB'
         pathClass = imp.load_source(className, self.path + "/" +self.aliases()['DB'] + '.py')
         return getattr(pathClass, className)
@@ -55,7 +50,7 @@ class App(app, database, Container):
     def getDBConnectionsData(self):
         if self.dbInstance != None:
             self.dbInstance.dbConf = self.dataConf
-            self.dbInstance.dbConnection = self.connections()"""
+            self.dbInstance.dbConnection = self.connections()
 
     def importInputFile(self):
         className = "Input"
